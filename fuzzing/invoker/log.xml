@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuite errors="0" failures="2" name="pytest" skips="0" tests="5" time="0.058">
+    <testcase classname="tests.test_foo" file="tests/test_foo.py" line="4" name="test_add[1-2-3]" time="0.000766754150390625"></testcase>
+    <testcase classname="tests.test_foo" file="tests/test_foo.py" line="4" name="test_add[2-4-5]" time="0.0015819072723388672">
+        <failure message="assert 6 == 5 +  where 6 = &lt;function add at 0x7fcb751b0158&gt;(2, 4) +    where &lt;function add at 0x7fcb751b0158&gt; = foo.add">a = 2, b = 4, expected = 5
+    @pytest.mark.parametrize(&quot;a, b, expected&quot;, [        (1, 2, 3),        (2, 4, 5),        (&quot;1&quot;, &quot;2&quot;, &quot;12&quot;)    ])    def test_add(a, b, expected):
+&gt;       assert foo.add(a, b) == expected
+E       assert 6 == 5
+E        +  where 6 = &lt;function add at 0x7fcb751b0158&gt;(2, 4)
+E        +    where &lt;function add at 0x7fcb751b0158&gt; = foo.add
+
+tests/test_foo.py:11: AssertionError</failure>
+    </testcase>
+    <testcase classname="tests.test_foo" file="tests/test_foo.py" line="4" name="test_add[1-2-12]" time="0.0014367103576660156"></testcase>
+    <testcase classname="tests.test_foo" file="tests/test_foo.py" line="13" name="test_invalid_add[1-1-TypeError]" time="0.0008244514465332031"></testcase>
+    <testcase classname="tests.test_foo" file="tests/test_foo.py" line="13" name="test_invalid_add[a1-2-AttributeError]" time="0.0007066726684570312">
+        <failure message="TypeError: can only concatenate list (not &quot;int&quot;) to list">a = [1], b = 2, expected = &lt;class &apos;AttributeError&apos;&gt;
+    @pytest.mark.parametrize(&quot;a, b, expected&quot;, [        (1, &quot;1&quot;, TypeError),        ([1], 2, AttributeError),    ])    def test_invalid_add(a, b, expected):        with pytest.raises(expected):
+&gt;           foo.add(a, b)
+
+tests/test_foo.py:20: _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a = [1], b = 2
+    def add(a, b):
+&gt;       return a + b
+E       TypeError: can only concatenate list (not &quot;int&quot;) to list
+
+fuzzing/foo.py:2: TypeError</failure>
+    </testcase>
+</testsuite>
