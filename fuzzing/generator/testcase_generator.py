@@ -150,11 +150,3 @@ def create_test_files(repo, src_dir):
         mod = '.'.join(sep_fpath[2:])
         mod_fn_args[mod] = fn_args
     return mod_fn_args
-
-
-def main():
-    create_test_files('numpy', 'numpy')
-
-
-if __name__ == '__main__':
-    main()

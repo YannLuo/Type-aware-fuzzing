@@ -104,11 +104,3 @@ def distinguish_succ_and_fail(result_dict):
                 else:
                     fail_dict[k][kk].append(arg)
     return succ_dict, fail_dict
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()

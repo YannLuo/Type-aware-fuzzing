@@ -54,11 +54,3 @@ def _gen_args_list(args_len):
     for args_types in args_types_list:
         args_list.append(_gen_args(args_types))
     return args_list
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()
