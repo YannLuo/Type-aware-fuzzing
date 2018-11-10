@@ -19,10 +19,14 @@ def main():
     print(succ, fail)
     result_dict = dump_testcase(mod_fn_args, mod_fn_results)
     succ_dict, _ = distinguish_succ_and_fail(result_dict)
+    # c = 0
+    # for k in succ_dict:
+    #     c += len(succ_dict[k])
+    # print(c)
     create_fuzz_dir(repo, succ_dict)
-    with multiprocessing.Pool(processes=4) as pool:
-        results = [pool.apply_async(func=fuzz_one_func, args=(repo, fn)) for fn in os.listdir(repo)[:8]]
-        (result.get() for result in results)
+    # with multiprocessing.Pool(processes=4) as pool:
+    #     results = [pool.apply_async(func=fuzz_one_func, args=(repo, fn)) for fn in os.listdir(repo)[:8]]
+    #     (result.get() for result in results)
 
 
 if __name__ == '__main__':
