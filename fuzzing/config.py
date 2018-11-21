@@ -1,4 +1,4 @@
-REPOS_DIR = 'repos'
+REPOS_DIR = 'REPOS'
 BASIC_TYPES = ['Dict', 'str', 'int', 'float', 'bool', 'List', 'bytes', 'Tuple', 'set'][:-3]
 INFO_FORMAT = '[%(levelname)s][%(asctime)s][%(pathname)s] %(message)s'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'

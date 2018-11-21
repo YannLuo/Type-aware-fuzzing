@@ -1,5 +1,6 @@
 import os
 import ast
+import sys
 import astor
 import shutil
 from collections import defaultdict
@@ -13,7 +14,6 @@ new_tests_dir = '%s_tests'
 def _read_py_files_from_repo(repo):
     def _travel(cur_path):
         if os.path.isdir(cur_path):
-            print(cur_path)
             files = os.listdir(cur_path)
             for file in files:
                 if not file.startswith('_') and file != 'conftest.py' and file != 'setup.py' and 'setup_' not in file and \
@@ -137,14 +137,13 @@ def create_test_files(repo, src_dir):
                     new_src_path = os.path.join(src_path, f)
                     _create_new_test_dir(new_src_path)
 
-
     new_tests_dir = new_tests_dir % (src_dir, )
     src_dir_path = os.path.join(repo, src_dir)
     py_files = _read_py_files_from_repo(src_dir_path)
     _create_new_test_dir(os.path.join(REPOS_DIR, repo, src_dir))
     mod_fn_args = {}
     for f in py_files:
-        print(f)
+        sys.stderr.write(f + os.linesep)
         fn_args = create_test_file(f)
         sep_fpath = f[:-3].split(os.path.sep)
         mod = '.'.join(sep_fpath[2:])

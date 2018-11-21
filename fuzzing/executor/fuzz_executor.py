@@ -3,7 +3,8 @@ import sys
 import time
 from subprocess import Popen
 from shlex import quote
-from fuzzing.config import DRIVER_TEMP
+from ..config import DRIVER_TEMP
+from ..callgraph.ICall import ICall
 
 
 def sleep(sec):
@@ -12,6 +13,7 @@ def sleep(sec):
 
 
 def create_fuzz_dir(repo, succ_dict):
+    reflect_dict = {}
     if not os.path.exists(repo):
         os.mkdir(repo)
     os.chdir(repo)
@@ -31,14 +33,17 @@ def create_fuzz_dir(repo, succ_dict):
             if not os.path.exists('driver.py'):
                 with open('driver.py', 'w', encoding='utf-8') as wf:
                     wf.write(DRIVER_TEMP % {"mod":mod, "func":fn})
+            call = ICall(mod, fn, '')
+            reflect_dict[str(call)] = call
             os.chdir('..')
     os.chdir('..')
+    return reflect_dict
 
 
 def fuzz_one_func(repo, fn):
     os.chdir(repo)
     os.chdir(fn)
-    with open('/dev/null', 'wb')  as devnull:
+    with open('/dev/null', 'wb') as devnull:
         with open('stdout.txt', 'wb') as stdout:
             input_dir = 'inputs'
             output_dir = 'outputs'
