@@ -15,8 +15,8 @@ import sys
 
 
 def main():
-    repo = 'numpy'
-    src_dir = 'numpy'
+    repo = 'pydantic'
+    src_dir = 'pydantic'
     mod_fn_args = testcase_generator.create_test_files(repo, src_dir)
     mod_fn_results, succ, fail = analyse_result_from_xml(os.path.join(config.EXEC_DIR, repo, 'report.xml'))
     sys.stderr.write(f'{succ} {fail}' + os.linesep)
