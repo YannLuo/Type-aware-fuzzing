@@ -1,17 +1,11 @@
 import os
 import sys
-import json
-import pickle
-from collections import defaultdict
 from fuzzing import config
 from fuzzing.generator import testcase_generator
 from fuzzing.executor.testcase_analyzer import analyse_result_from_xml, dump_testcase, distinguish_succ_and_fail
 from fuzzing.executor.fuzz_executor import create_fuzz_dir, fuzz_one_func
-import shutil
-import multiprocessing
 from fuzzing.callgraph.callgraph import dump_callgraph
 from fuzzing.callgraph.ICall import ICall
-import sys
 
 
 def main():
