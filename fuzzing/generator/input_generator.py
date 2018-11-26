@@ -1,9 +1,8 @@
 from faker import Faker
 import random
 import sys
-from fuzzing.config import REPOS_DIR, BASIC_TYPES, INFO_FORMAT, DATE_FORMAT, EXEC_DIR
-import ast
 from copy import deepcopy
+from ..config import BASIC_TYPES
 
 
 fake = Faker()

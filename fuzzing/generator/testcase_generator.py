@@ -3,9 +3,8 @@ import ast
 import sys
 import astor
 import shutil
-from collections import defaultdict
-from fuzzing.config import BASIC_TYPES, EXEC_DIR, REPOS_DIR
-from fuzzing.generator.input_generator import _gen_args_list
+from ..config import REPOS_DIR
+from .input_generator import _gen_args_list
 
 
 new_tests_dir = '%s_tests'
