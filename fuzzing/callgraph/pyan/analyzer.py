@@ -623,6 +623,24 @@ class CallGraphVisitor(ast.NodeVisitor):
                 self.logger.info("New edge added for Use from %s to %s (via resolved call to built-ins)" % (from_node, to_node))
 
         else:  # generic function call
+            from_node = self.get_node_of_current_namespace()
+            if from_node.flavor in [Flavor.FUNCTION, Flavor.METHOD, Flavor.STATICMETHOD, Flavor.CLASSMETHOD]:
+                try:
+                    spl_to_node_str = get_ast_node_name(node.func).split('.')
+                    if spl_to_node_str[0] == 'np':
+                        spl_to_node_str[0] = 'numpy'
+                    if spl_to_node_str[0] == 'numpy':
+                        flavor_type = Flavor.METHOD
+                        if len(spl_to_node_str) == 1:
+                            flavor_type = Flavor.FUNCTION
+                        to_node = self.get_node('.'.join(spl_to_node_str[:-1]), spl_to_node_str[-1], node,
+                                                flavor=flavor_type)
+                        to_node.defined = True
+                        # self.logger.debug("%s %s" % (from_node, to_node))
+                        self.add_uses_edge(from_node, to_node)
+                except:
+                    pass
+
             # Visit the function name part last, so that inside a binding form,
             # it will be left standing as self.last_value.
             self.visit(node.func)
@@ -1384,12 +1402,12 @@ class CallGraphVisitor(ast.NodeVisitor):
                 if n2.namespace is not None and not n2.defined:
                     n3 = self.get_node(None, n2.name, n2.ast_node)
                     n3.defined = False
-                    new_uses_edges.append((n, n3))
+                    # new_uses_edges.append((n, n3))
                     removed_uses_edges.append((n, n2))
-                    self.logger.info("Contracting non-existent from %s to %s as %s" % (n, n2, n3))
+                    self.logger.debug("Contracting non-existent from %s to %s as %s" % (n, n2, n3))
 
-        for from_node, to_node in new_uses_edges:
-            self.add_uses_edge(from_node, to_node)
+        # for from_node, to_node in new_uses_edges:
+        #     self.add_uses_edge(from_node, to_node)
 
         for from_node, to_node in removed_uses_edges:
             self.remove_uses_edge(from_node, to_node)
@@ -1440,7 +1458,7 @@ class CallGraphVisitor(ast.NodeVisitor):
                         pn2 = self.get_parent_node(n2)
                         pn3 = self.get_parent_node(n3)
                         if pn2 in self.uses_edges and pn3 in self.uses_edges[pn2]:  # remove the first edge W to X.name
-#                        if pn3 in self.uses_edges and pn2 in self.uses_edges[pn3]:  # remove the second edge W to Y.name (TODO: add an option to choose this)
+                        # if pn3 in self.uses_edges and pn2 in self.uses_edges[pn3]:  # remove the second edge W to Y.name (TODO: add an option to choose this)
                             inherited = True
 
                 if inherited and n in self.uses_edges:

@@ -266,10 +266,10 @@ class VisualGraph(object):
     def dump_callgraph(cls, visitor, options=None, logger=None):
         call_graph = defaultdict(list)
         for n in visitor.uses_edges:
-            if n.defined and n.flavor not in [Flavor.CLASS, Flavor.NAMESPACE, Flavor.MODULE]:
+            if n.flavor in [Flavor.FUNCTION, Flavor.METHOD, Flavor.STATICMETHOD, Flavor.CLASSMETHOD]:
                 for n2 in visitor.uses_edges[n]:
-                    if n2.defined and n2.flavor not in [Flavor.CLASS, Flavor.NAMESPACE, Flavor.MODULE]:
-                        caller = ICall(n.namespace, n.name, n.flavor)
-                        callee = ICall(n2.namespace, n2.name, n2.flavor)
+                    if n2.flavor in [Flavor.FUNCTION, Flavor.METHOD, Flavor.STATICMETHOD, Flavor.CLASSMETHOD]:
+                        caller = ICall(n.namespace, n.name, str(n.flavor))
+                        callee = ICall(n2.namespace, n2.name, str(n2.flavor))
                         call_graph[str(caller)].append(callee)
         return call_graph

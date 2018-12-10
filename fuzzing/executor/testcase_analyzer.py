@@ -1,15 +1,8 @@
-from fuzzing.config import EXEC_DIR, REPOS_DIR, INFO_FORMAT, DATE_FORMAT
+from fuzzing.config import EXEC_DIR, REPOS_DIR
 from subprocess import Popen
-import shutil
 import os
 import xml.dom.minidom
-import logging
 from collections import defaultdict
-
-
-logging.basicConfig(format=INFO_FORMAT,
-                    datefmt=DATE_FORMAT,
-                    filename="log.log")
 
 
 def copy_repo_to_execdir(repo):
@@ -61,7 +54,6 @@ def analyse_result_from_xml(report_xml_file):
             idx = name.index('[')
         except ValueError:
             file = testcase.getAttribute('file')
-            logging.warning(f'{file}::{name}')
             continue
         name = name[:idx]
         classname = testcase.getAttribute('classname')

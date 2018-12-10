@@ -10,7 +10,7 @@ class ICall(object):
         return f'{self.namespace} {self.name}'
 
     def __repr__(self):
-        return f'{self.namespace} {self.name} {self.flavor} {self.indeg}'
+        return f'{self.namespace} {self.name} {self.flavor}'
 
     def __lt__(self, other):
         return self.indeg < other.indeg

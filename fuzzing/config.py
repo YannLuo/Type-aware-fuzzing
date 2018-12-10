@@ -1,7 +1,6 @@
 REPOS_DIR = 'REPOS'
 BASIC_TYPES = ['Dict', 'str', 'int', 'float', 'bool', 'List', 'bytes', 'Tuple', 'set'][:-3]
-INFO_FORMAT = '[%(levelname)s][%(asctime)s][%(pathname)s] %(message)s'
-DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+INFO_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 EXEC_DIR = 'exec_env'
 DRIVER_TEMP = """
 import afl, os, sys
