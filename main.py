@@ -8,17 +8,11 @@ from fuzzing.strategy import sort_by_indegree
 from fuzzing.callgraph.callgraph import dump_callgraph
 import time
 import json
+from logger import create_logger
 
 
-def main():
-    # repo = 'astropy'
-    # src_dir = 'astropy'
-    #
-    # repo_path = os.path.join(config.REPOS_DIR, repo, src_dir, '**', '*.py')
-    repo_path = os.path.join('ecosystem', '**', '*.py')
-    stt = time.clock()
-    graph = dump_callgraph(repo_path)
-    with open('tmp.json', mode='w', encoding='utf-8') as wf:
+def save_callgraph_to_json(graph):
+    with open('callgraph.json', mode='w', encoding='utf-8') as wf:
         wf.write(
             json.dumps(graph,
                        default=lambda o: {
@@ -28,8 +22,21 @@ def main():
                        },
                        indent=4)
         )
+
+
+def main():
+    # repo = 'astropy'
+    # src_dir = 'astropy'
+    # repo_path = os.path.join(config.REPOS_DIR, repo, src_dir, '**', '*.py')
+
+    logger = create_logger('log.log')
+    repo_path = os.path.join('ecosystem', '**', '*.py')
+    stt = time.clock()
+    graph = dump_callgraph(repo_path, logger=logger)
     edt = time.clock()
-    print("Cost %.2f minutes." % ((edt - stt) / 60.0, ))
+    print("Generate callgraph cost %.2f minutes." % ((edt - stt) / 60.0,))
+
+    save_callgraph_to_json(graph)
 
     # mod_fn_args = testcase_generator.create_test_files(repo, src_dir)
     # mod_fn_results, succ, fail = analyse_result_from_xml(os.path.join(config.EXEC_DIR, repo, 'report.xml'))
