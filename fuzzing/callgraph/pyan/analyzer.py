@@ -612,7 +612,6 @@ class CallGraphVisitor(ast.NodeVisitor):
             result_node = self.resolve_builtins(node)
         except UnresolvedSuperCallError:
             result_node = None
-
         if isinstance(result_node, Node):  # resolved result
             self.last_value = result_node
 
@@ -623,23 +622,6 @@ class CallGraphVisitor(ast.NodeVisitor):
                 self.logger.info("New edge added for Use from %s to %s (via resolved call to built-ins)" % (from_node, to_node))
 
         else:  # generic function call
-            from_node = self.get_node_of_current_namespace()
-            if from_node.flavor in [Flavor.FUNCTION, Flavor.METHOD, Flavor.STATICMETHOD, Flavor.CLASSMETHOD]:
-                try:
-                    spl_to_node_str = get_ast_node_name(node.func).split('.')
-                    if spl_to_node_str[0] == 'np':
-                        spl_to_node_str[0] = 'numpy'
-                    if spl_to_node_str[0] == 'numpy':
-                        flavor_type = Flavor.METHOD
-                        if len(spl_to_node_str) == 1:
-                            flavor_type = Flavor.FUNCTION
-                        to_node = self.get_node('.'.join(spl_to_node_str[:-1]), spl_to_node_str[-1], node,
-                                                flavor=flavor_type)
-                        to_node.defined = True
-                        # self.logger.debug("%s %s" % (from_node, to_node))
-                        self.add_uses_edge(from_node, to_node)
-                except:
-                    pass
 
             # Visit the function name part last, so that inside a binding form,
             # it will be left standing as self.last_value.
@@ -662,6 +644,25 @@ class CallGraphVisitor(ast.NodeVisitor):
                 self.logger.debug("Use from %s to %s (call creates an instance)" % (from_node, to_node))
                 if self.add_uses_edge(from_node, to_node):
                     self.logger.info("New edge added for Use from %s to %s (call creates an instance)" % (from_node, to_node))
+            # else:
+            #     from_node = self.get_node_of_current_namespace()
+            #     if from_node.flavor in [Flavor.FUNCTION, Flavor.METHOD, Flavor.STATICMETHOD, Flavor.CLASSMETHOD]:
+            #         try:
+            #             spl_to_node_str = get_ast_node_name(node.func).split('.')
+            #             if spl_to_node_str[0] == 'np':
+            #                 spl_to_node_str[0] = 'numpy'
+            #             if spl_to_node_str[0] == 'numpy':
+            #                 flavor_type = Flavor.FUNCTION
+            #                 if len(spl_to_node_str) == 1:
+            #                     flavor_type = Flavor.FUNCTION
+            #                 to_node = self.get_node('.'.join(spl_to_node_str[:-1]), spl_to_node_str[-1], node,
+            #                                         flavor=flavor_type)
+            #                 to_node.defined = True
+            #                 # self.logger.warning("%s %s" % (from_node, to_node))
+            #                 self.add_uses_edge(from_node, to_node)
+            #         except:
+            #             # self.logger.warning(ast.dump(node.func))
+            #             pass
 
     def visit_With(self, node):
         self.logger.debug("With (context manager)")

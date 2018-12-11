@@ -6,17 +6,30 @@ from fuzzing.executor.testcase_analyzer import analyse_result_from_xml, dump_tes
 from fuzzing.executor.fuzz_executor import create_fuzz_dir, fuzz_one_func
 from fuzzing.strategy import sort_by_indegree
 from fuzzing.callgraph.callgraph import dump_callgraph
+import time
+import json
 
 
 def main():
-    repo = 'astropy'
-    src_dir = 'astropy'
-
-    repo_path = os.path.join(config.REPOS_DIR, repo, src_dir, '**', '*.py')
+    # repo = 'astropy'
+    # src_dir = 'astropy'
+    #
+    # repo_path = os.path.join(config.REPOS_DIR, repo, src_dir, '**', '*.py')
+    repo_path = os.path.join('ecosystem', '**', '*.py')
+    stt = time.clock()
     graph = dump_callgraph(repo_path)
-    import json
     with open('tmp.json', mode='w', encoding='utf-8') as wf:
-        wf.write(json.dumps(graph, default=lambda o: o.__dict__, indent=4))
+        wf.write(
+            json.dumps(graph,
+                       default=lambda o: {
+                           "namespace": o.__dict__["namespace"],
+                           "name": o.__dict__["name"],
+                           "flavor": o.__dict__["flavor"]
+                       },
+                       indent=4)
+        )
+    edt = time.clock()
+    print("Cost %.2f minutes." % ((edt - stt) / 60.0, ))
 
     # mod_fn_args = testcase_generator.create_test_files(repo, src_dir)
     # mod_fn_results, succ, fail = analyse_result_from_xml(os.path.join(config.EXEC_DIR, repo, 'report.xml'))
