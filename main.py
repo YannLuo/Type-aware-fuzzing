@@ -25,22 +25,25 @@ def save_callgraph_to_json(graph):
 
 
 def main():
-    # repo = 'astropy'
-    # src_dir = 'astropy'
-    # repo_path = os.path.join(config.REPOS_DIR, repo, src_dir, '**', '*.py')
+    repo = 'numpy'
+    src_dir = 'numpy'
+    repo_path = os.path.join(config.REPOS_DIR, repo, src_dir, '**', '*.py')
 
-    logger = create_logger('log.log')
-    repo_path = os.path.join('ecosystem', '**', '*.py')
-    stt = time.clock()
-    graph = dump_callgraph(repo_path, logger=logger)
-    edt = time.clock()
-    print("Generate callgraph cost %.2f minutes." % ((edt - stt) / 60.0,))
+    # logger = create_logger('log.log')
+    # repo_path = os.path.join('ecosystem', '**', '*.py')
+    # stt = time.clock()
+    # graph = dump_callgraph(repo_path, logger=logger)
+    # edt = time.clock()
+    # print("Generate callgraph cost %.2f minutes." % ((edt - stt) / 60.0,))
 
-    save_callgraph_to_json(graph)
+    # save_callgraph_to_json(graph)
 
-    # mod_fn_args = testcase_generator.create_test_files(repo, src_dir)
-    # mod_fn_results, succ, fail = analyse_result_from_xml(os.path.join(config.EXEC_DIR, repo, 'report.xml'))
-    # sys.stderr.write(f'{succ} {fail}' + os.linesep)
+    mod_fn_args = testcase_generator.create_test_files(repo, src_dir)
+    mod_fn_results, succ, fail = analyse_result_from_xml(os.path.join(config.EXEC_DIR, repo, 'report.xml'))
+    sys.stderr.write(f'========== 统计信息 ==========' + os.linesep)
+    sys.stderr.write(f'共计生成测试用例：{succ+fail}' + os.linesep)
+    sys.stderr.write(f'通过：{succ}' + os.linesep)
+    sys.stderr.write(f'失败：{fail}' + os.linesep)
     # result_dict = dump_testcase(mod_fn_args, mod_fn_results)
     # succ_dict, _ = distinguish_succ_and_fail(result_dict)
     # reflect_dict_fuzz = create_fuzz_dir(repo, succ_dict)
